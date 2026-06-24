@@ -197,13 +197,13 @@ void sparksCreate(s32 room, struct prop *prop, struct coord *pos, struct coord *
 			type->unk20 = colours[2];
 		}
 	} else if (typenum == SPARKTYPE_PAINT) {
-		type->unk1c = (random() % 2 ? 0xff000000 : 0) | (random() % 2 ? 0x00ff0000 : 0) | (random() % 2 ? 0x0000ff00 : 0) | 0xff;
+		type->unk1c = ((u32)random() & 1 ? 0xff000000 : 0) | ((u32)random() & 1 ? 0x00ff0000 : 0) | ((u32)random() & 1 ? 0x0000ff00 : 0) | 0xff;
 
 		if (type->unk1c == 0x000000ff) {
 			type->unk1c |= 0x0000ff00 << ((random() % 3) * 8);
 		}
 
-		type->unk20 = (random() % 2 ? 0xff000000 : 0) | (random() % 2 ? 0x00ff0000 : 0) | (random() % 2 ? 0x0000ff00 : 0) | 0xff;
+		type->unk20 = ((u32)random() & 1 ? 0xff000000 : 0) | ((u32)random() & 1 ? 0x00ff0000 : 0) | ((u32)random() & 1 ? 0x0000ff00 : 0) | 0xff;
 
 		if (type->unk20 == 0xff) {
 			type->unk20 |= 0x0000ff00 << ((random() % 3) * 8);

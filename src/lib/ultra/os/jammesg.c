@@ -15,7 +15,7 @@ s32 osJamMesg(OSMesgQueue *mq, OSMesg msg, s32 flag)
 		}
 	}
 
-	mq->first = (mq->first + mq->msgCount - 1) % mq->msgCount;
+	mq->first = (mq->first == 0) ? mq->msgCount - 1 : mq->first - 1;
 	mq->msg[mq->first] = msg;
 	mq->validCount++;
 

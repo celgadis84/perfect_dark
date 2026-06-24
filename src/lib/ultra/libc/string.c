@@ -2,15 +2,23 @@
 
 void *memcpy(void *s1, const void *s2, size_t n)
 {
-	char *su1 = (char *)s1;
-	const char *su2 = (const char *)s2;
+	u8 *su1 = (u8 *)s1;
+	const u8 *su2 = (const u8 *)s2;
+
+	if (((u32)su1 & 3) == 0 && ((u32)su2 & 3) == 0) {
+		u32 *dw = (u32 *)su1;
+		const u32 *sw = (const u32 *)su2;
+		while (n >= 4) { *dw++ = *sw++; n -= 4; }
+		su1 = (u8 *)dw;
+		su2 = (const u8 *)sw;
+	}
 
 	while (n > 0) {
 		*su1++ = *su2++;
 		n--;
 	}
 
-	return (void *)s1;
+	return s1;
 }
 
 size_t strlen(const char *s)
@@ -46,12 +54,17 @@ char *strchr(const char *s, int c)
  */
 void *memset(void *str, s32 c, size_t n)
 {
-	u8* m1 = (u8*) str;
-	u32 i;
+	u8 *m1 = (u8 *)str;
+	u8 uc = (u8)c;
 
-	for (i = 0; i < n; i++) {
-		m1[i] = c;
+	if (((u32)m1 & 3) == 0) {
+		u32 w = ((u32)uc) | ((u32)uc << 8) | ((u32)uc << 16) | ((u32)uc << 24);
+		u32 *dw = (u32 *)m1;
+		while (n >= 4) { *dw++ = w; n -= 4; }
+		m1 = (u8 *)dw;
 	}
+
+	while (n > 0) { *m1++ = uc; n--; }
 
 	return str;
 }

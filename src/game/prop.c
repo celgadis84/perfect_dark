@@ -58,7 +58,6 @@ void propsSort(void)
 {
 	s32 count = 0;
 	struct prop *prop = g_Vars.activeprops;
-	s32 swapindex;
 	f32 depth;
 	s32 i;
 	s32 j;
@@ -79,28 +78,20 @@ void propsSort(void)
 	g_Vars.onscreenprops[count] = NULL;
 	g_Vars.endonscreenprops = &g_Vars.onscreenprops[count];
 
-	// Sort the onscreenprops list
-	for (i = 0; i < count; i++) {
-		swapindex = -1;
-		depth = -4294967296;
+	// Sort the onscreenprops list (descending depth, insertion sort)
+	for (i = 1; i < count; i++) {
+		depth = depths[i];
+		prop = g_Vars.onscreenprops[i];
+		j = i - 1;
 
-		for (j = i; j < count; j++) {
-			if (depths[j] > depth) {
-				depth = depths[j];
-				swapindex = j;
-			}
+		while (j >= 0 && depths[j] < depth) {
+			depths[j + 1] = depths[j];
+			g_Vars.onscreenprops[j + 1] = g_Vars.onscreenprops[j];
+			j--;
 		}
 
-		if (swapindex >= 0) {
-			prop = g_Vars.onscreenprops[i];
-			depth = depths[i];
-
-			g_Vars.onscreenprops[i] = g_Vars.onscreenprops[swapindex];
-			depths[i] = depths[swapindex];
-
-			g_Vars.onscreenprops[swapindex] = prop;
-			depths[swapindex] = depth;
-		}
+		depths[j + 1] = depth;
+		g_Vars.onscreenprops[j + 1] = prop;
 	}
 }
 

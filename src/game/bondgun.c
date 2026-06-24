@@ -2996,8 +2996,8 @@ void bgunCalculateBlend(s32 handnum)
 	f32 sway = weapon->sway;
 	struct player *player = g_Vars.currentplayer;
 
-	sp60[handnum] = (player->hands[handnum].curblendpos + 2) % 4;
-	sp58[handnum] = (player->hands[handnum].curblendpos + 1) % 4;
+	sp60[handnum] = (player->hands[handnum].curblendpos + 2) & 3;
+	sp58[handnum] = (player->hands[handnum].curblendpos + 1) & 3;
 	player->hands[handnum].curblendpos = sp58[handnum];
 
 	player->hands[handnum].blendlook[sp60[handnum]].x = (RANDOMFRAC() - 0.5f) * 0.08f * sway;
@@ -3041,9 +3041,9 @@ static void bgunUpdateBlend(struct hand *hand, s32 handnum)
 	s32 pos = hand->curblendpos;
 	struct player *player = g_Vars.currentplayer;
 
-	func0f096b70(&hand->blendpos[(pos + 3) % 4], &hand->blendpos[pos], &hand->blendpos[(pos + 1) % 4], &hand->blendpos[(pos + 2) % 4], hand->dampt, &sp5c);
-	func0f096b70(&hand->blendlook[(pos + 3) % 4], &hand->blendlook[pos], &hand->blendlook[(pos + 1) % 4], &hand->blendlook[(pos + 2) % 4], hand->dampt, &sp50);
-	func0f096b70(&hand->blendup[(pos + 3) % 4], &hand->blendup[pos], &hand->blendup[(pos + 1) % 4], &hand->blendup[(pos + 2) % 4], hand->dampt, &sp44);
+	func0f096b70(&hand->blendpos[(pos + 3) & 3], &hand->blendpos[pos], &hand->blendpos[(pos + 1) & 3], &hand->blendpos[(pos + 2) & 3], hand->dampt, &sp5c);
+	func0f096b70(&hand->blendlook[(pos + 3) & 3], &hand->blendlook[pos], &hand->blendlook[(pos + 1) & 3], &hand->blendlook[(pos + 2) & 3], hand->dampt, &sp50);
+	func0f096b70(&hand->blendup[(pos + 3) & 3], &hand->blendup[pos], &hand->blendup[(pos + 1) & 3], &hand->blendup[(pos + 2) & 3], hand->dampt, &sp44);
 
 	sp5c.x *= player->gunposamplitude;
 	sp5c.y *= player->gunposamplitude;
@@ -3353,8 +3353,8 @@ void bgunTickGunLoad(void)
 		remaining = *player->gunctrl.loadmemremaining;
 
 		// Align ptr to the next 16 byte boundary
-		if (ptr % 16) {
-			padding = 16 - (ptr % 16);
+		if (ptr & 15u) {
+			padding = (-ptr) & 15u;
 			ptr += padding;
 			remaining -= padding;
 		}

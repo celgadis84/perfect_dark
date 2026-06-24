@@ -1056,9 +1056,9 @@ void wallhitCreateWith20Args(struct coord *relpos, struct coord *arg1, struct co
 					a = alpha ? alpha : 255;
 					break;
 				case WALLHITTYPE_PAINT:
-					r = (random() % 2) ? 0xff : 0;
-					g = (random() % 2) ? 0xff : 0;
-					b = (random() % 2) ? 0xff : 0;
+					r = ((u32)random() & 1) ? 0xff : 0;
+					g = ((u32)random() & 1) ? 0xff : 0;
+					b = ((u32)random() & 1) ? 0xff : 0;
 					a = alpha ? alpha : 255;
 					break;
 				default:

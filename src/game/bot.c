@@ -1775,8 +1775,8 @@ static struct prop *botFindPickup(struct chrdata *chr, s32 criteria)
 
 					for (i = 0; i < ARRAYCOUNT(weaponnums); i++) {
 						if (weaponnums[i] > WEAPON_UNARMED && weaponnums[i] == weapon->weaponnum) {
-							if (random() % 16) {
-								if (weapproplist[i] == NULL || sqdist1 < weapdistlist[i] || random() % 16 == 0) {
+							if ((u32)random() & 0xf) {
+								if (weapproplist[i] == NULL || sqdist1 < weapdistlist[i] || ((u32)random() & 0xf) == 0) {
 									weapproplist[i] = prop;
 									weapdistlist[i] = sqdist1;
 								}
@@ -1787,8 +1787,8 @@ static struct prop *botFindPickup(struct chrdata *chr, s32 criteria)
 
 					ammotype = botactGetAmmoTypeByFunction(weapon->weaponnum, FUNC_PRIMARY);
 
-					if (ammotype > 0 && random() % 16) {
-						if (ammoproplist[ammotype] == NULL || sqdist1 < ammodistlist[ammotype] || random() % 16 == 0) {
+					if (ammotype > 0 && ((u32)random() & 0xf)) {
+						if (ammoproplist[ammotype] == NULL || sqdist1 < ammodistlist[ammotype] || ((u32)random() & 0xf) == 0) {
 							ammoproplist[ammotype] = prop;
 							ammodistlist[ammotype] = sqdist1;
 						}
@@ -1811,8 +1811,8 @@ static struct prop *botFindPickup(struct chrdata *chr, s32 criteria)
 								if (weaponnum > 0) {
 									for (j = 0; j < ARRAYCOUNT(weaponnums); j++) {
 										if (weaponnums[j] > WEAPON_UNARMED && weaponnum == weaponnums[j]) {
-											if (random() % 16) {
-												if (weapproplist[j] == NULL || sqdist2 < weapdistlist[j] || random() % 16 == 0) {
+											if ((u32)random() & 0xf) {
+												if (weapproplist[j] == NULL || sqdist2 < weapdistlist[j] || ((u32)random() & 0xf) == 0) {
 													weapproplist[j] = prop;
 													weapdistlist[j] = sqdist2;
 												}
@@ -1822,8 +1822,8 @@ static struct prop *botFindPickup(struct chrdata *chr, s32 criteria)
 									}
 								}
 
-								if (random() % 16) {
-									if (ammoproplist[ammotype] == NULL || sqdist2 < ammodistlist[ammotype] || random() % 16 == 0) {
+								if ((u32)random() & 0xf) {
+									if (ammoproplist[ammotype] == NULL || sqdist2 < ammodistlist[ammotype] || ((u32)random() & 0xf) == 0) {
 										ammoproplist[ammotype] = prop;
 										ammodistlist[ammotype] = sqdist2;
 									}
@@ -1835,11 +1835,11 @@ static struct prop *botFindPickup(struct chrdata *chr, s32 criteria)
 							if (weaponnums[i] == WEAPON_MPSHIELD) {
 								sqdist2 = chrGetSquaredDistanceToCoord(chr, &prop->pos);
 
-								if (random() % 16 == 0) {
+								if (((u32)random() & 0xf) == 0) {
 									break;
 								}
 
-								if (weapproplist[i] == NULL || sqdist2 < weapdistlist[i] || random() % 16 == 0) {
+								if (weapproplist[i] == NULL || sqdist2 < weapdistlist[i] || ((u32)random() & 0xf) == 0) {
 									weapproplist[i] = prop;
 									weapdistlist[i] = sqdist2;
 								}
@@ -1915,7 +1915,7 @@ static struct prop *botFindPickup(struct chrdata *chr, s32 criteria)
 			// Meat, easy and normal sims reduce the limits further,
 			// making them less likely to fetch shields.
 			if (aibot->config->difficulty == BOTDIFF_MEAT) {
-				rand = aibot->random2 % 8;
+				rand = aibot->random2 & 7;
 
 				if (rand < 2) {
 					desiredshield = 0;
@@ -1932,7 +1932,7 @@ static struct prop *botFindPickup(struct chrdata *chr, s32 criteria)
 					}
 				}
 			} else if (aibot->config->difficulty == BOTDIFF_EASY) {
-				rand = aibot->random2 % 8;
+				rand = aibot->random2 & 7;
 
 				if (rand <= 0) {
 					desiredshield = 0;
@@ -2625,7 +2625,7 @@ void botTickUnpaused(struct chrdata *chr)
 								aibot->gotoprop = tokens[index];
 							} else if (botCanFollow(chr, tokens[index]->chr)) {
 								newaction = MA_AIBOTFOLLOW;
-								aibot->canbreakfollow = random() % 4 == 0;
+								aibot->canbreakfollow = ((u32)random() & 3) == 0;
 								aibot->followingplayernum = mpPlayerGetIndex(tokens[index]->chr);
 							}
 						}
@@ -2643,7 +2643,7 @@ void botTickUnpaused(struct chrdata *chr)
 								// Held by a teammate - follow/protect them
 								if (botCanFollow(chr, tokenchr)) {
 									newaction = MA_AIBOTFOLLOW;
-									aibot->canbreakfollow = random() % 4 == 0;
+									aibot->canbreakfollow = ((u32)random() & 3) == 0;
 									aibot->followingplayernum = mpPlayerGetIndex(tokenchr);
 								}
 							} else {
@@ -2726,7 +2726,7 @@ void botTickUnpaused(struct chrdata *chr)
 								// Uplink is held by teammate - protect them
 								if (botCanFollow(chr, uplinkchr)) {
 									newaction = MA_AIBOTFOLLOW;
-									aibot->canbreakfollow = random() % 4 == 0;
+									aibot->canbreakfollow = ((u32)random() & 3) == 0;
 									aibot->followingplayernum = mpPlayerGetIndex(uplinkchr);
 								}
 							} else {
@@ -2756,7 +2756,7 @@ void botTickUnpaused(struct chrdata *chr)
 								// Briefcase is held by teammate - protect them
 								if (botCanFollow(chr, tokenchr)) {
 									newaction = MA_AIBOTFOLLOW;
-									aibot->canbreakfollow = random() % 4 == 0;
+									aibot->canbreakfollow = ((u32)random() & 3) == 0;
 									aibot->followingplayernum = mpPlayerGetIndex(tokenchr);
 								}
 							} else if (!botIsTargetInvisible(chr, tokenchr) && botPassesCowardCheck(chr, tokenchr)) {
@@ -2784,7 +2784,7 @@ void botTickUnpaused(struct chrdata *chr)
 								// Victim is a teammate - protect them
 								if (botCanFollow(chr, victimchr)) {
 									newaction = MA_AIBOTFOLLOW;
-									aibot->canbreakfollow = random() % 4 == 0;
+									aibot->canbreakfollow = ((u32)random() & 3) == 0;
 									aibot->followingplayernum = mpPlayerGetIndex(victimchr);
 								}
 							} else {
@@ -2815,7 +2815,7 @@ void botTickUnpaused(struct chrdata *chr)
 
 						if (playernum >= 0) {
 							newaction = MA_AIBOTFOLLOW;
-							aibot->canbreakfollow = random() % 4 == 0;
+							aibot->canbreakfollow = ((u32)random() & 3) == 0;
 							aibot->followingplayernum = playernum;
 						}
 					}
@@ -2833,7 +2833,7 @@ void botTickUnpaused(struct chrdata *chr)
 
 							if (playernum >= 0) {
 								newaction = MA_AIBOTFOLLOW;
-								aibot->canbreakfollow = random() % 4 == 0;
+								aibot->canbreakfollow = ((u32)random() & 3) == 0;
 								aibot->followingplayernum = playernum;
 							}
 						}
@@ -2958,7 +2958,7 @@ void botTickUnpaused(struct chrdata *chr)
 
 				if (playernum >= 0) {
 					newaction = MA_AIBOTFOLLOW;
-					aibot->canbreakfollow = random() % 4 == 0;
+					aibot->canbreakfollow = ((u32)random() & 3) == 0;
 					aibot->followingplayernum = playernum;
 				}
 			}

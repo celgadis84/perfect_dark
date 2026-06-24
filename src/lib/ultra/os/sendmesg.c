@@ -18,7 +18,8 @@ s32 osSendMesg(OSMesgQueue *mq, OSMesg msg, s32 flags)
 		}
 	}
 
-	last = (mq->first + mq->validCount) % mq->msgCount;
+	last = mq->first + mq->validCount;
+	if (last >= mq->msgCount) last -= mq->msgCount;
 	mq->msg[last] = msg;
 	mq->validCount++;
 

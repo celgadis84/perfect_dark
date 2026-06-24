@@ -939,9 +939,9 @@ bool lightTickBroken(s32 roomnum, s32 lightnum)
 	}
 
 	if (light->sparking) {
-		if ((random() % 8) == 0) {
+		if (((u32)random() & 7) == 0) {
 			light->sparking = false;
-		} else if ((random() % 2) == 0) {
+		} else if (((u32)random() & 1) == 0) {
 			rand1 = 2.0f * RANDOMFRAC() - 1.0f; // range -1 to 1
 			rand2 = 2.0f * RANDOMFRAC() - 1.0f; // range -1 to 1
 			sparktype = -1;
@@ -988,7 +988,7 @@ bool lightTickBroken(s32 roomnum, s32 lightnum)
 			// the same but also emits the load and store instructions.
 			g_BgRooms[roomnum].unk00 += 0;
 
-			switch (random() % 4) {
+			switch ((u32)random() & 3) {
 			case 0:
 				sparktype = SPARKTYPE_LIGHT1;
 				break;
@@ -1011,7 +1011,7 @@ bool lightTickBroken(s32 roomnum, s32 lightnum)
 
 			sparksCreate(roomnum, NULL, &centre, &spa4, &sp8c, sparktype);
 
-			if ((random() % 4) == 0) {
+			if (((u32)random() & 3) == 0) {
 				s16 smokerooms[2]; // 64
 				smokerooms[0] = roomnum;
 				smokerooms[1] = -1;
@@ -1063,7 +1063,7 @@ static void func0f003444(void)
 		g_Rooms[i].unk60 = 0.5f;
 
 		for (j = 0; j < g_Rooms[i].numlights; j++) {
-			light->unk05_00 = random() % 2 ? true : false;
+			light->unk05_00 = ((u32)random() & 1) ? true : false;
 			light->healthy = true;
 			light->on = true;
 			light->sparking = false;
@@ -1086,7 +1086,7 @@ static void func0f0035c0(void)
 		g_Rooms[i].unk60 = 0;
 
 		for (j = 0; j < g_Rooms[i].numlights; j++) {
-			light->unk05_00 = random() % 2 ? true : false;
+			light->unk05_00 = ((u32)random() & 1) ? true : false;
 			light->healthy = false;
 			light->on = false;
 			light->sparking = false;

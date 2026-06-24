@@ -633,12 +633,13 @@ static bool chr0f01f378(struct model *model, struct coord *arg1, struct coord *a
 					ground = cdFindGroundInfoAtCyl(sp98, chr->radius, sp94,
 							&chr->floorcol, &chr->floortype, &floorflags, &chr->floorroom, &inlift, &lift);
 
-					if (chr->aibot
-							&& chr->aibot->unk078 == 0
+					struct aibot *aibot636 = chr->aibot;
+					if (aibot636
+							&& aibot636->unk078 == 0
 							&& ground < -100000
 							&& g_Vars.lvupdate60 >= 5
 							&& (chr->prop->flags & PROPFLAG_ONANYSCREENPREVTICK) == 0) {
-						chr->aibot->unk078 = 10;
+						aibot636->unk078 = 10;
 
 						*arg2 = prop->pos;
 
@@ -3357,7 +3358,7 @@ void chr0f0260c4(struct model *model, s32 hitpart, struct modelnode *node, struc
 						s32 i;
 
 						vertices = (struct gfxvtx *)((u32)rodata->vertices + word);
-						numverts = (u32)ptr[1] / 16 + 1;
+						numverts = ((u32)ptr[1] >> 4) + 1;
 
 						if (posnode) {
 							for (i = 0; i < numverts; i++) {
@@ -3471,7 +3472,7 @@ void chr0f0260c4(struct model *model, s32 hitpart, struct modelnode *node, struc
 						u8 *ptr = (u8 *)&gdlptr->words.w0;
 						u32 word = gdlptr->words.w1 & 0xffffff;
 						struct gfxvtx *vertices = (struct gfxvtx *)((u32)rodata->vertices + word);
-						s32 numverts = (u32)ptr[1] / 16 + 1;
+						s32 numverts = ((u32)ptr[1] >> 4) + 1;
 						s32 i;
 
 						if (posnode) {
@@ -3636,7 +3637,7 @@ static void chrBruise(struct model *model, s32 hitpart, struct modelnode *node, 
 						s32 i;
 
 						vertices = (struct gfxvtx *)((u32)rodata->vertices + word);
-						numverts = (u32)ptr[1] / 16 + 1;
+						numverts = ((u32)ptr[1] >> 4) + 1;
 
 						if (posnode) {
 							for (i = 0; i < numverts; i++) {
@@ -3769,7 +3770,7 @@ static void chrBruise(struct model *model, s32 hitpart, struct modelnode *node, 
 							u8 *ptr = (u8 *)&gdlptr->words.w0;
 							u32 word = gdlptr->words.w1 & 0xffffff;
 							struct gfxvtx *vertices = (struct gfxvtx *)((u32)rodata->vertices + word);
-							s32 numverts = (u32)ptr[1] / 16 + 1;
+							s32 numverts = ((u32)ptr[1] >> 4) + 1;
 							s32 i;
 
 							if (posnode) {
@@ -3964,7 +3965,7 @@ void chrDisfigure(struct chrdata *chr, struct coord *exppos, f32 damageradius)
 								s32 numverts;
 
 								vertices = (struct gfxvtx *)((u32)rwdata->vertices + word);
-								numverts = (u32)ptr[1] / 16 + 1;
+								numverts = ((u32)ptr[1] >> 4) + 1;
 
 								if (posnode) {
 									for (i = 0; i < numverts; i++) {

@@ -451,6 +451,8 @@ void botinvScoreWeapon(struct chrdata *chr, s32 weaponnum, s32 funcnum, s32 arg3
 	s32 score1 = 0;
 	s32 score2 = 0;
 	s32 extra = 0;
+	struct aibot *aibot = chr ? chr->aibot : NULL;
+	s32 random1 = aibot ? aibot->random1 : 0;
 
 	// @dangerous: Array overflow can occur if more weapons are added to the
 	// game without extending the preferences table
@@ -562,12 +564,12 @@ void botinvScoreWeapon(struct chrdata *chr, s32 weaponnum, s32 funcnum, s32 arg3
 		}
 		break;
 	case WEAPON_CYCLONE:
-		if (funcnum == (chr->aibot->random1 % 2)) {
+		if (funcnum == (random1 & 1)) {
 			score1--;
 		}
 		break;
 	case WEAPON_CALLISTO:
-		if (funcnum == (chr->aibot->random1 % 2)) {
+		if (funcnum == (random1 & 1)) {
 			score1--;
 		}
 		break;
@@ -575,8 +577,8 @@ void botinvScoreWeapon(struct chrdata *chr, s32 weaponnum, s32 funcnum, s32 arg3
 		if (chr->aibot->cloakdeviceenabled == false
 				&& botactGetAmmoQuantityByWeapon(chr->aibot, WEAPON_RCP120, FUNC_PRIMARY, true) > 500
 				&& chr->aibot->config->difficulty > BOTDIFF_MEAT) {
-			score1 += chr->aibot->random1 % 10;
-			score2 += chr->aibot->random1 % 10;
+			score1 += random1 % 10;
+			score2 += random1 % 10;
 		}
 		break;
 	case WEAPON_LAPTOPGUN:
@@ -593,12 +595,12 @@ void botinvScoreWeapon(struct chrdata *chr, s32 weaponnum, s32 funcnum, s32 arg3
 		break;
 	case WEAPON_SUPERDRAGON:
 		if (chr->aibot->config->type != BOTDIFF_HARD
-				&& (chr->aibot->random1 % 2) == funcnum) {
+				&& (random1 & 1) == funcnum) {
 			score1 -= 15;
 		}
 		break;
 	case WEAPON_SHOTGUN:
-		if (funcnum == (chr->aibot->random1 % 2)) {
+		if (funcnum == (random1 & 1)) {
 			score1--;
 		}
 		break;
@@ -615,7 +617,7 @@ void botinvScoreWeapon(struct chrdata *chr, s32 weaponnum, s32 funcnum, s32 arg3
 		}
 		break;
 	case WEAPON_ROCKETLAUNCHER:
-		if (funcnum == (chr->aibot->random1 % 2)) {
+		if (funcnum == (random1 & 1)) {
 			score1--;
 		}
 		break;
@@ -626,7 +628,7 @@ void botinvScoreWeapon(struct chrdata *chr, s32 weaponnum, s32 funcnum, s32 arg3
 					if (comparewithtarget) {
 						if (chr->target != -1
 								&& chr->aibot->chrsinsight[mpPlayerGetIndex(chrGetTargetProp(chr)->chr)] == 0
-								&& (chr->aibot->random1 % 2) == 0) {
+								&& (random1 & 1) == 0) {
 							score1 += 10;
 						} else {
 							score1 -= 10;
@@ -643,7 +645,7 @@ void botinvScoreWeapon(struct chrdata *chr, s32 weaponnum, s32 funcnum, s32 arg3
 					if (comparewithtarget) {
 						if (chr->target != -1
 								&& chr->aibot->chrsinsight[mpPlayerGetIndex(chrGetTargetProp(chr)->chr)] == 0
-								&& (chr->aibot->random1 % 2) == 0) {
+								&& (random1 & 1) == 0) {
 							score1 = 178;
 							score2 = 188;
 						} else {
@@ -695,11 +697,11 @@ void botinvScoreWeapon(struct chrdata *chr, s32 weaponnum, s32 funcnum, s32 arg3
 				if (chr->aibot->config->difficulty <= BOTDIFF_MEAT) {
 					score1 = 0;
 					score2 = 0;
-				} else if (bluramount > TICKS(3500) && (chr->aibot->random1 % 2) == 0) {
-					score1 = chr->aibot->random1 % 140 + 48;
+				} else if (bluramount > TICKS(3500) && (random1 & 1) == 0) {
+					score1 = random1 % 140 + 48;
 					score2 = 188;
-				} else if (chr->aibot->random1 % 10 == 0) {
-					score1 = chr->aibot->random1 % 140 + 48;
+				} else if (random1 % 10 == 0) {
+					score1 = random1 % 140 + 48;
 					score2 = 188;
 				} else {
 					score1 = 0;
@@ -709,7 +711,7 @@ void botinvScoreWeapon(struct chrdata *chr, s32 weaponnum, s32 funcnum, s32 arg3
 				if (bluramount >= TICKS(5000)) {
 					score2 = 48;
 
-					if (chr->aibot->random1 % 2) {
+					if (random1 & 1) {
 						score1 = 0;
 						score2 = 0;
 					}
@@ -724,10 +726,10 @@ void botinvScoreWeapon(struct chrdata *chr, s32 weaponnum, s32 funcnum, s32 arg3
 					value *= value;
 					value *= value;
 
-					if (value < chr->aibot->random1) {
+					if (value < random1) {
 						score2 = 48;
 
-						if (chr->aibot->random1 % 2) {
+						if (random1 & 1) {
 							score1 = 0;
 							score2 = 0;
 						}

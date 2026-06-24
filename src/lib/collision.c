@@ -437,6 +437,19 @@ static f32 cd00025724(f32 x1, f32 z1, f32 x2, f32 z2)
 	return sqrtf(x2 * x2 + z2 * z2);
 }
 
+/**
+ * Squared 2D distance. Used where the result is only compared against a
+ * threshold: comparing squared distance to squared threshold avoids the
+ * sqrtf (~29 cycle FPU op) in the per-tile collision loops.
+ */
+static f32 cd00025724sq(f32 x1, f32 z1, f32 x2, f32 z2)
+{
+	x2 -= x1;
+	z2 -= z1;
+
+	return x2 * x2 + z2 * z2;
+}
+
 static bool cd00025774(f32 x1, f32 z1, f32 x2, f32 z2, f32 x3, f32 z3)
 {
 	f32 f0;
@@ -1075,8 +1088,8 @@ static bool cd0002709cIntTile(struct geotilei *tile, f32 x, f32 z, f32 radius, s
 			}
 
 			if (value <= radius
-					&& (cd00025724(tile->vertices[i][0], tile->vertices[i][2], x, z) <= radius
-						|| cd00025724(tile->vertices[next][0], tile->vertices[next][2], x, z) <= radius
+					&& (cd00025724sq(tile->vertices[i][0], tile->vertices[i][2], x, z) <= radius * radius
+						|| cd00025724sq(tile->vertices[next][0], tile->vertices[next][2], x, z) <= radius * radius
 						|| cd00025774(tile->vertices[i][0], tile->vertices[i][2], tile->vertices[next][0], tile->vertices[next][2], x, z))) {
 				collision->geo = &tile->header;
 				collision->vertexindex = i;
@@ -1116,8 +1129,8 @@ static bool cd000272f8FltTile(struct geotilef *tile, f32 x, f32 z, f32 radius, s
 			}
 
 			if (value <= radius
-					&& (cd00025724(tile->vertices[i].x, tile->vertices[i].z, x, z) <= radius
-						|| cd00025724(tile->vertices[next].x, tile->vertices[next].z, x, z) <= radius
+					&& (cd00025724sq(tile->vertices[i].x, tile->vertices[i].z, x, z) <= radius * radius
+						|| cd00025724sq(tile->vertices[next].x, tile->vertices[next].z, x, z) <= radius * radius
 						|| cd00025774(tile->vertices[i].x, tile->vertices[i].z, tile->vertices[next].x, tile->vertices[next].z, x, z))) {
 				collision->geo = &tile->header;
 				collision->vertexindex = i;
@@ -1162,8 +1175,8 @@ s32 cd000274e0Block(struct geoblock *tile, f32 x, f32 z, f32 radius, struct prop
 			}
 
 			if (value <= radius
-					&& (cd00025724(tile->vertices[i][0], tile->vertices[i][1], x, z) <= radius
-						|| cd00025724(tile->vertices[next][0], tile->vertices[next][1], x, z) <= radius
+					&& (cd00025724sq(tile->vertices[i][0], tile->vertices[i][1], x, z) <= radius * radius
+						|| cd00025724sq(tile->vertices[next][0], tile->vertices[next][1], x, z) <= radius * radius
 						|| cd00025774(tile->vertices[i][0], tile->vertices[i][1], tile->vertices[next][0], tile->vertices[next][1], x, z))) {
 				if (collision) {
 					collision->geo = &tile->header;
@@ -1374,8 +1387,8 @@ static void cd00027f78(struct geotilei *tile, f32 arg1, f32 arg2, f32 arg3, stru
 			}
 
 			if (f0 <= arg3
-					&& (cd00025724(tile->vertices[i][0], tile->vertices[i][2], arg1, arg2) <= arg3
-						|| cd00025724(tile->vertices[next][0], tile->vertices[next][2], arg1, arg2) <= arg3
+					&& (cd00025724sq(tile->vertices[i][0], tile->vertices[i][2], arg1, arg2) <= arg3 * arg3
+						|| cd00025724sq(tile->vertices[next][0], tile->vertices[next][2], arg1, arg2) <= arg3 * arg3
 						|| cd00025774(tile->vertices[i][0], tile->vertices[i][2], tile->vertices[next][0], tile->vertices[next][2], arg1, arg2))) {
 				if (*numcollisions < maxcollisions) {
 					collisions[*numcollisions].geo = &tile->header;
@@ -1502,8 +1515,8 @@ static void cd0002840c(struct geotilef *tile, f32 arg1, f32 arg2, f32 arg3, stru
 			}
 
 			if (f0 <= arg3
-					&& (cd00025724(tile->vertices[i].x, tile->vertices[i].z, arg1, arg2) <= arg3
-						|| cd00025724(tile->vertices[next].x, tile->vertices[next].z, arg1, arg2) <= arg3
+					&& (cd00025724sq(tile->vertices[i].x, tile->vertices[i].z, arg1, arg2) <= arg3 * arg3
+						|| cd00025724sq(tile->vertices[next].x, tile->vertices[next].z, arg1, arg2) <= arg3 * arg3
 						|| cd00025774(tile->vertices[i].x, tile->vertices[i].z, tile->vertices[next].x, tile->vertices[next].z, arg1, arg2))) {
 				if (*numcollisions < maxcollisions) {
 					collisions[*numcollisions].geo = &tile->header;
@@ -1536,8 +1549,8 @@ static void cd00028638(struct geoblock *block, f32 arg1, f32 arg2, f32 arg3, str
 			}
 
 			if (f0 <= arg3
-					&& (cd00025724(block->vertices[i][0], block->vertices[i][1], arg1, arg2) <= arg3
-						|| cd00025724(block->vertices[next][0], block->vertices[next][1], arg1, arg2) <= arg3
+					&& (cd00025724sq(block->vertices[i][0], block->vertices[i][1], arg1, arg2) <= arg3 * arg3
+						|| cd00025724sq(block->vertices[next][0], block->vertices[next][1], arg1, arg2) <= arg3 * arg3
 						|| cd00025774(block->vertices[i][0], block->vertices[i][1], block->vertices[next][0], block->vertices[next][1], arg1, arg2))) {
 				if (*numcollisions < maxcollisions) {
 					collisions[*numcollisions].geo = &block->header;
@@ -2797,8 +2810,8 @@ static bool cd0002b954Cyl(struct coord *arg0, struct coord *arg1, struct coord *
 		}
 
 		if (sp74 < radius
-				&& (cd00025724(arg0->x, arg0->z, x, z) < radius
-					|| cd00025724(arg1->x, arg1->z, x, z) < radius
+				&& (cd00025724sq(arg0->x, arg0->z, x, z) < radius * radius
+					|| cd00025724sq(arg1->x, arg1->z, x, z) < radius * radius
 					|| cd00025774(arg0->x, arg0->z, arg1->x, arg1->z, x, z))) {
 			f32 xdiff = arg1->x - arg0->x;
 			f32 zdiff = arg1->z - arg0->z;

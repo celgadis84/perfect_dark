@@ -1214,7 +1214,7 @@ static s32 mpFindMaxInt(s32 numplayers, s32 val0, s32 val1, s32 val2, s32 val3)
 	s32 bestplayer = 0;
 
 	if (numplayers >= 2) {
-		if (val1 > bestvalue || (val1 == bestvalue && (random() % 2))) {
+		if (val1 > bestvalue || (val1 == bestvalue && ((u32)random() & 1))) {
 			bestplayer = 1;
 			bestvalue = val1;
 		} else {
@@ -1223,13 +1223,13 @@ static s32 mpFindMaxInt(s32 numplayers, s32 val0, s32 val1, s32 val2, s32 val3)
 		}
 
 		if (numplayers >= 3) {
-			if (val2 > bestvalue || (val2 == bestvalue && (random() % 2))) {
+			if (val2 > bestvalue || (val2 == bestvalue && ((u32)random() & 1))) {
 				bestplayer = 2;
 				bestvalue = val2;
 			}
 
 			if (numplayers >= 4) {
-				if (val3 > bestvalue || (val3 == bestvalue && (random() % 2))) {
+				if (val3 > bestvalue || (val3 == bestvalue && ((u32)random() & 1))) {
 					bestplayer = 3;
 				}
 			}
@@ -1245,7 +1245,7 @@ static s32 mpFindMinInt(s32 numplayers, s32 val0, s32 val1, s32 val2, s32 val3)
 	s32 bestplayer = 0;
 
 	if (numplayers >= 2) {
-		if (val1 < bestvalue || (val1 == bestvalue && (random() % 2))) {
+		if (val1 < bestvalue || (val1 == bestvalue && ((u32)random() & 1))) {
 			bestplayer = 1;
 			bestvalue = val1;
 		} else {
@@ -1254,13 +1254,13 @@ static s32 mpFindMinInt(s32 numplayers, s32 val0, s32 val1, s32 val2, s32 val3)
 		}
 
 		if (numplayers >= 3) {
-			if (val2 < bestvalue || (val2 == bestvalue && (random() % 2))) {
+			if (val2 < bestvalue || (val2 == bestvalue && ((u32)random() & 1))) {
 				bestplayer = 2;
 				bestvalue = val2;
 			}
 
 			if (numplayers >= 4) {
-				if (val3 < bestvalue || (val3 == bestvalue && (random() % 2))) {
+				if (val3 < bestvalue || (val3 == bestvalue && ((u32)random() & 1))) {
 					bestplayer = 3;
 				}
 			}
@@ -1278,7 +1278,7 @@ static s32 mpFindMaxFloat(s32 numplayers, f32 val0, f32 val1, f32 val2, f32 val3
 	s32 bestplayer = 0;
 
 	if (numplayers >= 2) {
-		if (val1 > val0 || (val1 == val0 && (random() % 2))) {
+		if (val1 > val0 || (val1 == val0 && ((u32)random() & 1))) {
 			bestplayer = 1;
 			bestvalue = val1;
 		} else {
@@ -1287,13 +1287,13 @@ static s32 mpFindMaxFloat(s32 numplayers, f32 val0, f32 val1, f32 val2, f32 val3
 		}
 
 		if (numplayers >= 3) {
-			if (val2 > bestvalue || (val2 == bestvalue && (random() % 2))) {
+			if (val2 > bestvalue || (val2 == bestvalue && ((u32)random() & 1))) {
 				bestplayer = 2;
 				bestvalue = val2;
 			}
 
 			if (numplayers >= 4) {
-				if (val3 > bestvalue || (val3 == bestvalue && (random() % 2))) {
+				if (val3 > bestvalue || (val3 == bestvalue && ((u32)random() & 1))) {
 					bestplayer = 3;
 				}
 			}
@@ -1313,7 +1313,7 @@ static s32 mpFindMinFloat(s32 numplayers, f32 val0, f32 val1, f32 val2, f32 val3
 	if (numplayers >= 2) {
 		if (val0);
 
-		if (val1 < val0 || (val1 == val0 && (random() % 2))) {
+		if (val1 < val0 || (val1 == val0 && ((u32)random() & 1))) {
 			bestplayer = 1;
 			bestvalue = val1;
 		} else {
@@ -1322,13 +1322,13 @@ static s32 mpFindMinFloat(s32 numplayers, f32 val0, f32 val1, f32 val2, f32 val3
 		}
 
 		if (numplayers >= 3) {
-			if (val2 < bestvalue || (val2 == bestvalue && (random() % 2))) {
+			if (val2 < bestvalue || (val2 == bestvalue && ((u32)random() & 1))) {
 				bestplayer = 2;
 				bestvalue = val2;
 			}
 
 			if (numplayers >= 4) {
-				if (val3 < bestvalue || (val3 == bestvalue && (random() % 2))) {
+				if (val3 < bestvalue || (val3 == bestvalue && ((u32)random() & 1))) {
 					bestplayer = 3;
 				}
 			}

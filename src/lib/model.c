@@ -3118,27 +3118,27 @@ static void modelRenderNodeStarGunfire(struct modelrenderdata *renderdata, struc
 
 				dst[0].s = corner3;
 				dst[0].t = corner2;
-				dst[0].x = (src[(s1 + 0) % 4].x * mult) >> 16;
-				dst[0].y = (src[(s1 + 0) % 4].y * mult) >> 16;
-				dst[0].z = (src[(s1 + 0) % 4].z * mult) >> 16;
+				dst[0].x = (src[(s1 + 0) & 3].x * mult) >> 16;
+				dst[0].y = (src[(s1 + 0) & 3].y * mult) >> 16;
+				dst[0].z = (src[(s1 + 0) & 3].z * mult) >> 16;
 
 				dst[1].s = corner1;
 				dst[1].t = corner3;
-				dst[1].x = (src[(s1 + 1) % 4].x * mult) >> 16;
-				dst[1].y = (src[(s1 + 1) % 4].y * mult) >> 16;
-				dst[1].z = (src[(s1 + 1) % 4].z * mult) >> 16;
+				dst[1].x = (src[(s1 + 1) & 3].x * mult) >> 16;
+				dst[1].y = (src[(s1 + 1) & 3].y * mult) >> 16;
+				dst[1].z = (src[(s1 + 1) & 3].z * mult) >> 16;
 
 				dst[2].s = corner4;
 				dst[2].t = corner1;
-				dst[2].x = (src[(s1 + 2) % 4].x * mult) >> 16;
-				dst[2].y = (src[(s1 + 2) % 4].y * mult) >> 16;
-				dst[2].z = (src[(s1 + 2) % 4].z * mult) >> 16;
+				dst[2].x = (src[(s1 + 2) & 3].x * mult) >> 16;
+				dst[2].y = (src[(s1 + 2) & 3].y * mult) >> 16;
+				dst[2].z = (src[(s1 + 2) & 3].z * mult) >> 16;
 
 				dst[3].s = corner2;
 				dst[3].t = corner4;
-				dst[3].x = (src[(s1 + 3) % 4].x * mult) >> 16;
-				dst[3].y = (src[(s1 + 3) % 4].y * mult) >> 16;
-				dst[3].z = (src[(s1 + 3) % 4].z * mult) >> 16;
+				dst[3].x = (src[(s1 + 3) & 3].x * mult) >> 16;
+				dst[3].y = (src[(s1 + 3) & 3].y * mult) >> 16;
+				dst[3].z = (src[(s1 + 3) & 3].z * mult) >> 16;
 
 				src += 4;
 				dst += 4;
@@ -3219,7 +3219,7 @@ static void modelRenderNodeChrGunfire(struct modelrenderdata *renderdata, struct
 		spd4 = cosf(spec);
 		spd0 = sinf(spec);
 
-		scale = 0.75f + (random() % 128) * (1.0f / 256.0f); // 0.75 to 1.25
+		scale = 0.75f + (random() & 127) * (1.0f / 256.0f); // 0.75 to 1.25
 
 		sp9c.f[0] = rodata->dim.f[0] * scale;
 		sp9c.f[1] = rodata->dim.f[1] * scale;

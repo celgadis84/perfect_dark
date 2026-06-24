@@ -1486,7 +1486,7 @@ static void chrChooseStandAnimation(struct chrdata *chr, f32 mergetime)
 		} else if ((gun1 && gun2) || (!gun1 && !gun2)
 				|| weaponIsOneHanded(gun1)
 				|| weaponIsOneHanded(gun2)) {
-			modelSetAnimation(chr->model, ANIM_006A, random() % 2, 0, 0.25, mergetime);
+			modelSetAnimation(chr->model, ANIM_006A, (u32)random() & 1, 0, 0.25, mergetime);
 			modelSetAnimLooping(chr->model, 0, 16);
 		} else if (gun2 || gun1) {
 			modelSetAnimation(chr->model, ANIM_TWO_GUN_HOLD, gun1 != NULL, 0, 0.25, mergetime);
@@ -1494,7 +1494,7 @@ static void chrChooseStandAnimation(struct chrdata *chr, f32 mergetime)
 			modelSetAnimEndFrame(chr->model, 120);
 		}
 	} else if (race == RACE_SKEDAR) {
-		modelSetAnimation(chr->model, ANIM_00C0, random() % 2, 0, 0.5, mergetime);
+		modelSetAnimation(chr->model, ANIM_00C0, (u32)random() & 1, 0, 0.5, mergetime);
 	} else if (race == RACE_DRCAROLL) {
 		modelSetAnimation(chr->model, ANIM_013E, 0, 0, 0.5, mergetime);
 	} else if (race == RACE_ROBOT) {
@@ -1617,7 +1617,7 @@ static void chrKneelChooseAnimation(struct chrdata *chr)
 				|| (!gun1 && !gun2)
 				|| weaponIsOneHanded(gun1)
 				|| weaponIsOneHanded(gun2)) {
-			bool flip = random() % 2;
+			bool flip = (u32)random() & 1;
 			modelSetAnimation(chr->model, ANIM_KNEEL_SHOOT_RIGHT_HAND, flip, 0, chrGetRangedSpeed(chr, 0.5, 0.8), 16);
 			modelSetAnimEndFrame(chr->model, 28);
 		} else if (gun2 || gun1) {
@@ -1650,7 +1650,7 @@ static void chrStartAlarmChooseAnimation(struct chrdata *chr)
 	if (gun1 && !gun2) {
 		flip = true;
 	} else if ((gun1 && gun2) || (!gun1 && !gun2)) {
-		flip = random() % 2;
+		flip = (u32)random() & 1;
 	}
 
 	modelSetAnimation(chr->model, ANIM_TALKING_003D, flip, 40, 1, 16);
@@ -1783,14 +1783,14 @@ static void chrSidestepChooseAnimation(struct chrdata *chr)
 	u32 race = CHRRACE(chr);
 
 	if (gun1 && gun2) {
-		flip = random() % 2;
-		allowflip = random() % 2;
+		flip = (u32)random() & 1;
+		allowflip = (u32)random() & 1;
 	} else {
 		if (weaponIsOneHanded(gun1) == false
 				&& weaponIsOneHanded(gun2) == false
 				&& (gun1 || gun2)) {
 			flip = (gun1 != 0);
-			allowflip = random() % 2;
+			allowflip = (u32)random() & 1;
 		}
 	}
 
@@ -1848,7 +1848,7 @@ static void chrJumpOutChooseAnimation(struct chrdata *chr)
 		flip = true;
 	} else if ((gun1 && gun2) || (!gun1 && !gun2)
 			|| weaponIsOneHanded(gun1) || weaponIsOneHanded(gun2)) {
-		flip = random() % 2;
+		flip = (u32)random() & 1;
 	}
 
 	if ((chr->act_jumpout.side && !flip) || (chr->act_jumpout.side == 0 && flip)) {
@@ -1889,7 +1889,7 @@ static void chrRunPosChooseAnimation(struct chrdata *chr)
 
 	if ((gun1 && gun2) || (!gun1 && !gun2)) {
 		heavy = false;
-		flip = random() % 2;
+		flip = (u32)random() & 1;
 	} else if (weaponIsOneHanded(gun1) || weaponIsOneHanded(gun2)) {
 		heavy = false;
 		flip = (bool)gun1 != false;
@@ -1957,7 +1957,7 @@ static void chrAttackStand(struct chrdata *chr, u32 attackflags, s32 entityid)
 		struct prop *rightgun2 = chrGetHeldUsableProp(chr, HAND_RIGHT);
 
 		if (leftgun2 && rightgun2) {
-			flip = random() % 2;
+			flip = (u32)random() & 1;
 
 			if (random() % 3 == 0) {
 				animgroup = g_StandLightAttackAnims[race];
@@ -2027,7 +2027,7 @@ static void chrAttackKneel(struct chrdata *chr, u32 attackflags, s32 entityid)
 		rightgun2 = chrGetHeldUsableProp(chr, HAND_RIGHT);
 
 		if (leftgun2 && rightgun2) {
-			flip = random() % 2;
+			flip = (u32)random() & 1;
 
 			if (random() % 3 == 0) {
 				animgroup = g_KneelLightAttackAnims[race];
@@ -2088,7 +2088,7 @@ static void chrAttackWalk(struct chrdata *chr, bool run)
 		s32 style = 0;
 
 		if (leftgun2 && rightgun2) {
-			flip = random() % 2;
+			flip = (u32)random() & 1;
 			style = random() % 3;
 		} else {
 			flip = (bool)rightgun2 == false;
@@ -2196,7 +2196,7 @@ static void chrAttackWalk(struct chrdata *chr, bool run)
 	chr->act_attackwalk.facedtarget = false;
 	chr->act_attackwalk.animcfg = animcfg;
 	chr->act_attackwalk.nextshot60 = 0;
-	chr->act_attackwalk.nextgun = random() % 2;
+	chr->act_attackwalk.nextgun = (u32)random() & 1;
 	chr->act_attackwalk.firegun[HAND_LEFT] = firing[HAND_LEFT];
 	chr->act_attackwalk.firegun[HAND_RIGHT] = firing[HAND_RIGHT];
 	chr->act_attackwalk.everytick[HAND_LEFT] = everytick[HAND_LEFT];
@@ -2261,7 +2261,7 @@ static void chrAttackRoll(struct chrdata *chr, bool toleft)
 		struct prop *rightgun2 = chrGetHeldUsableProp(chr, HAND_RIGHT);
 
 		if (leftgun2 && rightgun2) {
-			flip = random() % 2;
+			flip = (u32)random() & 1;
 			onehanded = true;
 
 			if (random() % 3 == 0) {
@@ -2292,14 +2292,14 @@ static void chrAttackRoll(struct chrdata *chr, bool toleft)
 
 	if ((toleft && !flip) || (!toleft && flip)) {
 		// Roll to left
-		if (random() % 2) {
+		if ((u32)random() & 1) {
 			animcfg = &g_RollAttackAnims[0];
 		} else {
 			animcfg = &g_RollAttackAnims[2];
 		}
 	} else {
 		// Roll to right
-		if (random() % 2) {
+		if ((u32)random() & 1) {
 			animcfg = &g_RollAttackAnims[1];
 		} else {
 			animcfg = &g_RollAttackAnims[3];
@@ -2353,7 +2353,7 @@ static void chrAttackRoll(struct chrdata *chr, bool toleft)
 
 	chr->act_attack.animcfg = animcfg;
 	chr->act_attack.fired = false;
-	chr->act_attack.nextgun = random() % 2;
+	chr->act_attack.nextgun = (u32)random() & 1;
 	chr->act_attack.firegun[HAND_LEFT] = firing[HAND_LEFT];
 	chr->act_attack.firegun[HAND_RIGHT] = firing[HAND_RIGHT];
 	chr->act_attack.everytick[HAND_LEFT] = everytick[HAND_LEFT];
@@ -2374,10 +2374,10 @@ static void chrAttackRoll(struct chrdata *chr, bool toleft)
 			chr->act_attack.maxshots = 1;
 		}
 	} else {
-		chr->act_attack.maxshots = (random() % 4) + 2;
+		chr->act_attack.maxshots = ((u32)random() & 3) + 2;
 
 		if (firing[HAND_RIGHT] && firing[HAND_LEFT]) {
-			chr->act_attack.maxshots += (random() % 4) + 2;
+			chr->act_attack.maxshots += ((u32)random() & 3) + 2;
 		}
 	}
 
@@ -2605,7 +2605,7 @@ static void chrAttack(struct chrdata *chr, struct attackanimgroup **animgroups, 
 		chr->act_attack.turning = TURNSTATE_TURNING;
 		chr->act_attack.animcfg = animcfg;
 		chr->act_attack.fired = false;
-		chr->act_attack.nextgun = random() % 2;
+		chr->act_attack.nextgun = (u32)random() & 1;
 		chr->act_attack.firegun[HAND_LEFT] = firing[HAND_LEFT];
 		chr->act_attack.firegun[HAND_RIGHT] = firing[HAND_RIGHT];
 		chr->act_attack.everytick[HAND_LEFT] = everytick[HAND_LEFT];
@@ -2627,13 +2627,13 @@ static void chrAttack(struct chrdata *chr, struct attackanimgroup **animgroups, 
 			if (attackflags & ATTACKFLAG_SINGLESHOT) {
 				chr->act_attack.maxshots = 1;
 			} else {
-				chr->act_attack.maxshots = (random() % 4) + 2;
+				chr->act_attack.maxshots = ((u32)random() & 3) + 2;
 			}
 
 			// @bug: ATTACKFLAG_SINGLESHOT is not respected here if both guns
 			// are firing.
 			if (firing[HAND_RIGHT] && firing[HAND_LEFT]) {
-				chr->act_attack.maxshots += (random() % 4) + 2;
+				chr->act_attack.maxshots += ((u32)random() & 3) + 2;
 			}
 		}
 
@@ -2902,7 +2902,7 @@ void chrBeginDeath(struct chrdata *chr, struct coord *dir, f32 relangle, s32 hit
 				if (fval1 < 150 && fval2 < 150
 						&& fval1 - fval2 < 10 && fval1 - fval2 > -10
 						&& !wasknockedout) {
-					struct animtablerow *row = &g_AnimTableHumanSlumped[random() % 4];
+					struct animtablerow *row = &g_AnimTableHumanSlumped[(u32)random() & 3];
 					u32 stack3;
 
 					chr->act_die.thudframe1 = row->thudframe1;
@@ -2947,7 +2947,7 @@ void chrBeginDeath(struct chrdata *chr, struct coord *dir, f32 relangle, s32 hit
 					}
 				} else {
 					row = &rows[1];
-					flip = random() % 2;
+					flip = (u32)random() & 1;
 				}
 
 				chr->act_die.thudframe1 = row->thudframe1;
@@ -2976,7 +2976,7 @@ void chrBeginDeath(struct chrdata *chr, struct coord *dir, f32 relangle, s32 hit
 						s32 tmp = random() % g_AnimTablesByRace[race][index].deathanimcount;
 						row = &g_AnimTablesByRace[race][index].deathanims[tmp];
 					} else if (chr->specialdie == SPECIALDIE_ONCHAIR) {
-						row = &g_SpecialDieAnims[chr->specialdie + random() % 2];
+						row = &g_SpecialDieAnims[chr->specialdie + ((u32)random() & 1)];
 
 						// chr->myspecial is the tag number of the chr's chair
 						if (chr->myspecial >= 0) {
@@ -3698,13 +3698,13 @@ static void chrChoke(struct chrdata *chr, s32 choketype)
 			chr->soundtimer = 0;
 		} else if (choketype == CHOKETYPE_COUGH) {
 			if (male) {
-				if ((random() % 2) == 0) {
+				if (((u32)random() & 1) == 0) {
 					soundnum = SFX_COUGH_04AF;
 				} else {
 					soundnum = SFX_COUGH_04B0;
 				}
 			} else {
-				s32 index = random() % 4;
+				s32 index = (u32)random() & 3;
 				s32 sounds[] = {
 					SFX_COUGH_05AB,
 					SFX_COUGH_05AC,
@@ -4154,11 +4154,11 @@ static void chrDamage(struct chrdata *chr, f32 damage, struct coord *vector, str
 			if (sqdist < 200 * 200) {
 				damage *= 4.0f + (s32)(random() % 3); // 4, 5 or 6
 			} else if (sqdist < 400 * 400) {
-				damage *= 3.0f + (s32)(random() % 2); // 3 or 4
+				damage *= 3.0f + (s32)((u32)random() & 1); // 3 or 4
 			} else if (sqdist < 800 * 800) {
-				damage *= 2.0f + (s32)(random() % 2); // 2 or 3
+				damage *= 2.0f + (s32)((u32)random() & 1); // 2 or 3
 			} else if (sqdist < 1600 * 1600) {
-				damage *= 1.0f + (s32)(random() % 2); // 1 or 2
+				damage *= 1.0f + (s32)((u32)random() & 1); // 1 or 2
 			}
 		}
 	}
@@ -5431,7 +5431,7 @@ static void chrGoPosChooseAnimation(struct chrdata *chr)
 	if (race == RACE_HUMAN || race == RACE_SKEDAR) {
 		if ((gun1 && gun2) || (!gun1 && !gun2)) {
 			heavy = false;
-			flip = random() % 2;
+			flip = (u32)random() & 1;
 		} else {
 			if (weaponIsOneHanded(gun1) || weaponIsOneHanded(gun2)) {
 				heavy = false;
@@ -5518,7 +5518,7 @@ static void chrGoPosChooseAnimation(struct chrdata *chr)
 							|| chr->hitpart == HITPART_RBICEP) {
 						anim = ANIM_01F8;
 					} else {
-						if (random() % 2) {
+						if ((u32)random() & 1) {
 							anim = ANIM_0018;
 						} else {
 							anim = ANIM_0028;
@@ -5553,7 +5553,7 @@ static void chrGoPosChooseAnimation(struct chrdata *chr)
 						speed = 0.4;
 						flip = false;
 					} else if (male) {
-						if (random() % 4 == 0) {
+						if (((u32)random() & 3) == 0) {
 							speed = 0.25;
 							anim = ANIM_001E;
 						} else {
@@ -5562,7 +5562,7 @@ static void chrGoPosChooseAnimation(struct chrdata *chr)
 							sp60 = 24;
 						}
 					} else {
-						if (random() % 2) {
+						if ((u32)random() & 1) {
 							anim = ANIM_005E;
 						} else {
 							anim = ANIM_005A;
@@ -5603,14 +5603,14 @@ static void chrGoPosChooseAnimation(struct chrdata *chr)
 					} else if (g_Vars.stagenum == STAGE_CHICAGO) {
 						anim = ANIM_005F;
 					} else if (male) {
-						if (random() % 2) {
+						if ((u32)random() & 1) {
 							anim = ANIM_001D;
 						} else {
 							anim = ANIM_RUNNING_ONEHANDGUN;
 						}
 					} else {
 						if (chr->myaction != MA_PANIC) {
-							if (random() % 2) {
+							if ((u32)random() & 1) {
 								anim = ANIM_005D;
 							} else {
 								anim = ANIM_0073;
@@ -5646,7 +5646,7 @@ static void chrGoPosChooseAnimation(struct chrdata *chr)
 					} else if (male) {
 						anim = anims[random() % 3];
 					} else {
-						if (random() % 2) {
+						if ((u32)random() & 1) {
 							anim = ANIM_005C;
 						} else {
 							anim = ANIM_0072;
@@ -5804,7 +5804,7 @@ static void chrPatrolChooseAnimation(struct chrdata *chr)
 		if ((leftprop && rightprop) || (!leftprop && !rightprop)) {
 			// No weapon, or double weapons
 			heavy = false;
-			flip = random() % 2;
+			flip = (u32)random() & 1;
 		} else {
 			// Single weapon
 			if (weaponIsOneHanded(leftprop) || weaponIsOneHanded(rightprop)) {
@@ -5822,12 +5822,12 @@ static void chrPatrolChooseAnimation(struct chrdata *chr)
 			speed = 0.5f * func0f02dff0(ANIM_0028) / func0f02dff0(ANIM_006B);
 
 			if (heavy) {
-				modelSetAnimation(chr->model, random() % 2 ? ANIM_0018 : ANIM_0028, flip, 0, speed, 16);
+				modelSetAnimation(chr->model, (u32)random() & 1 ? ANIM_0018 : ANIM_0028, flip, 0, speed, 16);
 			} else if (ismale) {
 				s32 anims[] = { ANIM_006B, ANIM_001B, ANIM_0016 };
 				modelSetAnimation(chr->model, anims[random() % 3], flip, 0, speed, 16);
 			} else {
-				modelSetAnimation(chr->model, random() % 2 ? ANIM_005C : ANIM_0072, flip, 0, speed, 16);
+				modelSetAnimation(chr->model, (u32)random() & 1 ? ANIM_005C : ANIM_0072, flip, 0, speed, 16);
 			}
 		}
 	} else if (race == RACE_DRCAROLL) {
@@ -6338,7 +6338,7 @@ bool chrTrySidestep(struct chrdata *chr)
 
 		if (angle < 0.7852731347084f || angle > 5.4969120025635f
 				|| (angle > 2.3558194637299f && angle < 3.9263656139374f)) {
-			bool side = (random() % 2) == 0;
+			bool side = ((u32)random() & 1) == 0;
 
 			if (chrCanJumpInDirection(chr, side, 100)) {
 				chrSidestep(chr, side);
@@ -6376,7 +6376,7 @@ bool chrTryJumpOut(struct chrdata *chr)
 		//		|| (angle > BADDEG2RAD(135) && angle < BADDEG2RAD(225))) {
 		if (angle < 0.7852731347084f || angle > 5.4969120025635f
 				|| (angle > 2.3558194637299f && angle < BADDEG2RAD(225))) {
-			bool side = (random() % 2) == 0;
+			bool side = ((u32)random() & 1) == 0;
 
 			if (chrCanJumpInDirection(chr, side, 200)) {
 				chrJumpOut(chr, side);
@@ -6405,7 +6405,7 @@ bool chrTryRunSideways(struct chrdata *chr)
 		struct coord vector;
 		struct coord dstpos;
 
-		chrGetSideVectorToTarget(chr, random() % 2 == 0, &vector);
+		chrGetSideVectorToTarget(chr, ((u32)random() & 1) == 0, &vector);
 
 		dstpos.x = vector.x * distance + prop->pos.x;
 		dstpos.y = prop->pos.y;
@@ -6475,7 +6475,7 @@ bool chrTryAttackRoll(struct chrdata *chr)
 			f32 sqdistance = x * x + y * y + z * z;
 
 			if (sqdistance >= 200 * 200) {
-				bool toleft = (random() % 2) == 0;
+				bool toleft = ((u32)random() & 1) == 0;
 
 				if (chrCanRollInDirection(chr, toleft, 200)) {
 					chrAttackRoll(chr, toleft);
@@ -6976,7 +6976,7 @@ bool chrTryPunch(struct chrdata *chr, u8 reverse)
 	struct punchanim *anims = NULL;
 	s32 race = CHRRACE(chr);
 	s32 animindex;
-	u32 chranimflags = (random() % 256 > 128) ? CHRANIMFLAG_FLIP : 0;
+	u32 chranimflags = (((u32)random() & 0xff) > 128) ? CHRANIMFLAG_FLIP : 0;
 	s32 chrhitradius;
 	s32 playerhitradius;
 	f32 startframe;
@@ -6999,7 +6999,7 @@ bool chrTryPunch(struct chrdata *chr, u8 reverse)
 			animindex = 5;
 		} else if (!chr->weapons_held[HAND_RIGHT] && !chr->weapons_held[HAND_LEFT]) {
 			// Unarmed: Only use indexes 0 or 1
-			animindex = random() % 2;
+			animindex = (u32)random() & 1;
 		} else {
 			// Allow indexes 0-4, but if 3 or 4 then flip the anim based on
 			// which hand is holding the gun
@@ -7175,7 +7175,7 @@ static void chrTickStand(struct chrdata *chr)
 							|| (!leftgun && !rightgun)
 							|| weaponIsOneHanded(leftgun)
 							|| weaponIsOneHanded(rightgun)) {
-						modelSetAnimation(chr->model, ANIM_006B, random() % 2, 0, 0.5f, 16);
+						modelSetAnimation(chr->model, ANIM_006B, (u32)random() & 1, 0, 0.5f, 16);
 						modelSetAnimEndFrame(chr->model, animGetNumFrames(ANIM_006B) - 1);
 					} else {
 						if (rightgun || leftgun) {
@@ -7184,7 +7184,7 @@ static void chrTickStand(struct chrdata *chr)
 						}
 					}
 				} else if (race == RACE_SKEDAR) {
-					modelSetAnimation(chr->model, ANIM_0392, random() % 2, 0, 0.5f, 16);
+					modelSetAnimation(chr->model, ANIM_0392, (u32)random() & 1, 0, 0.5f, 16);
 					modelSetAnimEndFrame(chr->model, animGetNumFrames(ANIM_0392) - 1);
 				}
 			} else if (chr->act_stand.flags & ATTACKFLAG_AIMATDIRECTION) {
@@ -9396,7 +9396,7 @@ static void chrTickShoot(struct chrdata *chr, s32 handnum)
 
 							hitpos = targetprop->pos;
 
-							if (random() % 2) {
+							if ((u32)random() & 1) {
 								hitpos.y += 2 + random() % 10;
 							} else {
 								hitpos.y -= 2 + random() % 10;
@@ -10215,7 +10215,7 @@ static void chrTickAttackRoll(struct chrdata *chr)
 				f32 sp34 = 16;
 
 				if (chr->act_attack.firegun[HAND_LEFT] && chr->act_attack.firegun[HAND_RIGHT]) {
-					if (random() % 2 == 0) {
+					if (((u32)random() & 1) == 0) {
 						newanimcfg += 4;
 					} else {
 						newanimcfg += 8;
